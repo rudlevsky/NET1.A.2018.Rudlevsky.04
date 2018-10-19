@@ -6,13 +6,13 @@ namespace WordGeneration.Tests
     [TestFixture]
     public class WordGeneratorTests
     {
-        //[TestCase(new double[] { 123, 0.89, -0.275, 0.44 },ExpectedResult = new string[] { "one two three", "zero point eight nine", "minus point two seven five", "zero point four four"})]
-        //[TestCase(new double[] { 123 },ExpectedResult = new string[] { "one two three"})]
-        [Test]
-        public void TransformToWords_CorrectArrayOfDoubleNumbers_CorrectArrayOfStrings()
-        {
-            CollectionAssert.Equals(new string[] { "one" }, WordGenerator.TransformToWords(new double[] { 1 }));
-        }
+
+        [TestCase(new double[] { -2.54, 0.35, 1.7 },ExpectedResult = new string[]
+        {"minus two point five four", "zero point three five", "one point seven"})]
+        [TestCase(new double[] { 0.378, 6685.7 },ExpectedResult = new string[]
+        {"zero point three seven eight", "six six eight five point seven"})]
+        public string[] TransformToWordsTest_WithCorrectArrays(double[] doubles)
+        => WordGenerator.TransformToWords(doubles);
 
         [Test]
         public void TransformToWords_NullReference_ArgumentNullException()

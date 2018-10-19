@@ -28,12 +28,12 @@ namespace WordGeneration
                 throw new ArgumentException(nameof(numbers) + " length can't be equal to 0");
             }
 
-            return TransformToWords(numbers);
+            return TransformWords(numbers);
         }
 
         private static string[] TransformWords(double[] numbers)
         {
-            string[] arrayWord = new string[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+            string[] arrayWord = new string[] { "zero ", "one ", "two ", "three ", "four ", "five ", "six ", "seven ", "eight ", "nine " };
             var strNumber = new StringBuilder();
             var arrayResult = new StringBuilder();
             string[] allResults = new string[numbers.Length];
@@ -61,7 +61,7 @@ namespace WordGeneration
                         {
                             if (j == int.Parse(strNumber[i].ToString()))
                             {
-                                arrayResult.Append(arrayWord[j] + " ");
+                                arrayResult.Append(arrayWord[j]);
                             }
                         }
                     }

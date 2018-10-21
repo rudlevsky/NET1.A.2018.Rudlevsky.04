@@ -13,13 +13,9 @@ namespace NodAlgorithms
         /// </summary>
         /// <param name="array">Array of numbers.</param>
         /// <returns>Nod of numbers from the array.</returns>
-        /// <exception cref="ArgumentException">Throws when array argument is empty.</exception>
         public static int GetNodE(params int[] array)
         {
-            if (array.Length == 0)
-            {
-                throw new ArgumentException(nameof(array) + " can't be equal to 0");
-            }
+            CheckRules(array);
 
             int temp = array[0];
 
@@ -55,13 +51,9 @@ namespace NodAlgorithms
         /// </summary>
         /// <param name="array">Array of numbers.</param>
         /// <returns>Nod of numbers from the array.</returns>
-        /// <exception cref="ArgumentException">Throws when array argument is empty.</exception>
         public static int GetNodS(params int[] array)
         {
-            if (array.Length == 0)
-            {
-                throw new ArgumentException(nameof(array) + " can't be equal to 0");
-            }
+            CheckRules(array);
 
             int temp = array[0];
 
@@ -122,6 +114,25 @@ namespace NodAlgorithms
                 return ((b & 1) == 0)
                     ? SteinAlg(a, b >> 1)
                     : SteinAlg(b, a > b ? a - b : b - a);
+        }
+
+        /// <summary>
+        /// Check array according special rules.
+        /// </summary>
+        /// <param name="array">Array for checking.</param>
+        /// <exception cref="ArgumentException">Throws when array argument is empty.</exception>
+        /// <exception cref="ArgumentNullException">Throws when array equals to null.</exception>
+        private static void CheckRules(int[] array)
+        {
+            if (array == null)
+            {
+                throw new ArgumentNullException(nameof(array) + " can't be equal to null");
+            }
+
+            if (array.Length == 0)
+            {
+                throw new ArgumentException(nameof(array) + " can't be equal to 0");
+            }
         }
     }
 }

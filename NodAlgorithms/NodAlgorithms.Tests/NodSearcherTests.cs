@@ -39,6 +39,18 @@ namespace NodAlgorithms.Tests
         }
 
         [Test]
+        public void MethodGetNodE_Null_ArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => NodSearcher.GetNodE(null));
+        }
+
+        [Test]
+        public void MethodGetNodS_Null_ArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => NodSearcher.GetNodS(null));
+        }
+
+        [Test]
         public void MethodGetNodS_EmptyArray_ArgumentException()
         {
             Assert.Throws<ArgumentException>(() => NodSearcher.GetNodS());

@@ -25,5 +25,17 @@ namespace WordGeneration.Tests
         {
             Assert.Throws<ArgumentException>(() => WordGenerator.TransformToWords(new double[] { }));
         }
+
+        [Test]
+        public void TransformToIEEEFormat_NullReference_ArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => WordGenerator.TransformToIEEEFormat(null));
+        }
+
+        [Test]
+        public void TransformToIEEEFormat_EmptyArray_ArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => WordGenerator.TransformToIEEEFormat(new double[] { }));
+        }
     }
 }

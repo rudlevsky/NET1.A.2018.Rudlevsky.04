@@ -5,6 +5,13 @@ using DoubleConverter;
 namespace WordGeneration
 {
     /// <summary>
+    /// Creates string representation of the number.
+    /// </summary>
+    /// <param name="number">Numeric representation of the number.</param>
+    /// <returns>Number in string representation.</returns>
+    public delegate string Transformer(double number);
+
+    /// <summary>
     /// Class contains methods for generating words.
     /// </summary>
     public static class WordGenerator
@@ -18,17 +25,54 @@ namespace WordGeneration
         {
             CheckRules(numbers);
 
-            return TransformWords(numbers, false);
+            string[] allResults = new string[numbers.Length];
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                allResults[i] = GetUsualNum(numbers[i]);
+            }
+
+            return allResults;
         }
 
+        /// <summary>
+        /// Check array according rules and find string words.
+        /// </summary>
+        /// <param name="numbers">User's array of numbers.</param>
+        /// <returns>Return string representation of user's numbers in IEEE format.</returns>
         public static string[] TransformToIEEEFormat(double[] numbers)
         {
             CheckRules(numbers);
 
-            return TransformWords(numbers, true);
+            string[] allResults = new string[numbers.Length];
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                allResults[i] = GetIEEENum(numbers[i]);
+            }
+
+            return allResults;
         }
 
-        private static string GetUsualNum(double number)
+        /// <summary>
+        /// Check array according rules and find string words according delegate method.
+        /// </summary>
+        /// <param name="numbers">User's array of numbers.</param>
+        /// <param name="transformer">Delegate which contains method for getting string representation of the word.</param>
+        /// <returns>Return string representation of user's numbers.</returns>
+        public static string[] TransformToWords(double[] numbers, Transformer transformer)
+        {
+            CheckRules(numbers);
+
+            return CountWords(numbers, transformer);
+        }
+
+        /// <summary>
+        /// Creates string representation of the number.
+        /// </summary>
+        /// <param name="number">Numeric representation of the number.</param>
+        /// <returns>Number in string representation.</returns>
+        public static string GetUsualNum(double number)
         {
             string[] arrayWord = new string[] { "zero ", "one ", "two ", "three ", "four ", "five ", "six ", "seven ", "eight ", "nine ", "minus ", "point " };
             var arrayResult = new StringBuilder();
@@ -66,26 +110,21 @@ namespace WordGeneration
             return arrayResult.ToString();
         }
 
-        private static string GetIEEENum(double number) =>
+        /// <summary>
+        /// Creates string representation of the number in IEEE format.
+        /// </summary>
+        /// <param name="number">Numeric representation of the number.</param>
+        /// <returns>Number in string representation in IEEE format.</returns>
+        public static string GetIEEENum(double number) =>
             Converter.ConvertToBinary(number);
-        
-        private static string[] TransformWords(double[] numbers, bool IsIEEE)
+
+        private static string[] CountWords(double[] numbers, Transformer transformer)
         {
             string[] allResults = new string[numbers.Length];
-            int count = 0;
 
-            for (int k = 0; k < numbers.Length; k++)
+            for (int i = 0; i < numbers.Length; i++)
             {
-                if (IsIEEE)
-                {
-                    allResults[count] = GetIEEENum(numbers[k]);
-                }
-                else
-                {
-                    allResults[count] = GetUsualNum(numbers[k]);
-                }
-
-                count++;
+                allResults[i] = transformer(numbers[i]);
             }
 
             return allResults;
@@ -103,6 +142,5 @@ namespace WordGeneration
                 throw new ArgumentException(nameof(numbers) + " length can't be equal to 0");
             }
         }
-
     }
 }

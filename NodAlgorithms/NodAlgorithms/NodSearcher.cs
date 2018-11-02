@@ -4,6 +4,14 @@ using System.Diagnostics;
 namespace NodAlgorithms
 {
     /// <summary>
+    /// Finds a nod of two numbers.
+    /// </summary>
+    /// <param name="a">First number.</param>
+    /// <param name="b">Second number.</param>
+    /// <returns>Nod of two numbers.</returns>
+    public delegate int Transformer(int a, int b);
+
+    /// <summary>
     /// Class contains methods for getting nod.
     /// </summary>
     public static class NodSearcher
@@ -14,7 +22,7 @@ namespace NodAlgorithms
         /// <param name="time">Time of calculating.</param>
         /// <param name="array">Array of numbers for calculations.</param>
         /// <returns>Nod of numbers from the array.</returns>
-        public static int GetNodE(out long time, params int[] array)
+        public static int GetNod(out long time, Transformer transformer, params int[] array)
         {
             CheckRules(array);
 
@@ -25,7 +33,7 @@ namespace NodAlgorithms
 
             for (int i = 1; i < array.Length; i++)
             {
-                temp = EvklAlg(temp, array[i]);
+                temp = transformer(temp, array[i]);
             }
 
             stopWatch.Stop();
@@ -41,12 +49,12 @@ namespace NodAlgorithms
         /// <param name="num1">First number.</param>
         /// <param name="num2">Second number.</param>
         /// <returns>Nod of numbers.</returns>
-        public static int GetNodE(out long time, int num1, int num2)
+        public static int GetNod(out long time, int num1, int num2, Transformer transformer)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            int temp = EvklAlg(num1, num2);
+            int temp = transformer(num1, num2);
 
             stopWatch.Stop();
             time = stopWatch.ElapsedTicks;
@@ -62,12 +70,12 @@ namespace NodAlgorithms
         /// <param name="num2">Second number.</param>
         /// <param name="num3">Third number.</param>
         /// <returns>Nod of numbers.</returns>
-        public static int GetNodE(out long time, int num1, int num2, int num3)
+        public static int GetNod(out long time, int num1, int num2, int num3, Transformer transformer)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            int temp = EvklAlg(EvklAlg(num1, num2), num3);
+            int temp = transformer(transformer(num1, num2), num3);
 
             stopWatch.Stop();
             time = stopWatch.ElapsedTicks;
@@ -84,12 +92,12 @@ namespace NodAlgorithms
         /// <param name="num3">Third number.</param>
         /// <param name="num4">Fourth number.</param>
         /// <returns>Nod of numbers.</returns>
-        public static int GetNodE(out long time, int num1, int num2, int num3, int num4)
+        public static int GetNod(out long time, int num1, int num2, int num3, int num4, Transformer transformer)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            int temp = EvklAlg(EvklAlg(EvklAlg(num1, num2), num3), num4);
+            int temp = transformer(transformer(transformer(num1, num2), num3), num4);
 
             stopWatch.Stop();
             time = stopWatch.ElapsedTicks;
@@ -98,92 +106,17 @@ namespace NodAlgorithms
         }
 
         /// <summary>
-        /// Method calculates nod from the array of numbers.
+        /// Method calculates nod.
         /// </summary>
-        /// <param name="time">Time of calculating.</param>
-        /// <param name="array">Array of numbers for calculations.</param>
-        /// <returns>Nod of numbers.</returns>
-        public static int GetNodS(out long time, params int[] array)
+        /// <param name="a">First number.</param>
+        /// <param name="b">Second number.</param>
+        /// <returns>Returns nod.</returns>
+        public static int EvklAlg(int a, int b)
         {
-            CheckRules(array);
+            if (b == 0)
+                return Math.Abs(a);
 
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            int temp = array[0];
-
-            for (int i = 1; i < array.Length; i++)
-            {
-                temp = SteinAlg(temp, array[i]);
-            }
-
-            stopWatch.Stop();
-            time = stopWatch.ElapsedTicks;
-
-            return temp;
-        }
-
-        /// <summary>
-        /// Method calculates nod of two numbers.
-        /// </summary>
-        /// <param name="time">Time of calculating.</param>
-        /// <param name="num1">First number.</param>
-        /// <param name="num2">Second number.</param>
-        /// <returns>Nod of numbers.</returns>
-        public static int GetNodS(out long time, int num1, int num2)
-        {
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            int nod = SteinAlg(num1, num2);
-
-            stopWatch.Stop();
-            time = stopWatch.ElapsedTicks;
-
-            return nod;
-        }
-
-        /// <summary>
-        /// Method calculates nod of three numbers.
-        /// </summary>
-        /// <param name="time">Time of calculating.</param>
-        /// <param name="num1">First number.</param>
-        /// <param name="num2">Second number.</param>
-        /// <param name="num3">Third number.</param>
-        /// <returns>Nod of numbers.</returns>
-        public static int GetNodS(out long time, int num1, int num2, int num3)
-        {
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            int nod = SteinAlg(SteinAlg(num1, num2), num3);
-
-            stopWatch.Stop();
-            time = stopWatch.ElapsedTicks;
-
-            return nod;
-        }
-
-        /// <summary>
-        /// Method calculates nod of four numbers.
-        /// </summary>
-        /// <param name="time">Time of calculating.</param>
-        /// <param name="num1">First number.</param>
-        /// <param name="num2">Second number.</param>
-        /// <param name="num3">Third number.</param>
-        /// <param name="num4">Fourth number.</param>
-        /// <returns>Nod of numbers.</returns>
-        public static int GetNodS(out long time, int num1, int num2, int num3, int num4)
-        {
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            int nod = SteinAlg(SteinAlg(SteinAlg(num1, num2), num3), num4);
-
-            stopWatch.Stop();
-            time = stopWatch.ElapsedTicks;
-
-            return nod;
+            return EvklAlg(b, a % b);
         }
 
         /// <summary>
@@ -192,7 +125,7 @@ namespace NodAlgorithms
         /// <param name="a">First argument.</param>
         /// <param name="b">Second argument.</param>
         /// <returns>Nod of two arguments.</returns>
-        private static int SteinAlg(int a, int b)
+        public static int SteinAlg(int a, int b)
         {
             if (a == 0)
                 return b;
@@ -233,20 +166,6 @@ namespace NodAlgorithms
             {
                 throw new ArgumentException(nameof(array) + " can't be equal to 0");
             }
-        }
-
-        /// <summary>
-        /// Method calculates nod.
-        /// </summary>
-        /// <param name="a">First number.</param>
-        /// <param name="b">Second number.</param>
-        /// <returns>Returns nod.</returns>
-        private static int EvklAlg(int a, int b)
-        {
-            if (b == 0)
-                return Math.Abs(a);
-
-            return EvklAlg(b, a % b);
         }
     }
 }

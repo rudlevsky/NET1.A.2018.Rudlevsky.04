@@ -12,8 +12,10 @@ namespace WordGeneration
         /// <summary>
         /// Check array according rules and find string words according delegate method.
         /// </summary>
+        /// <typeparam name="TSource">Type of source.</typeparam>
+        /// <typeparam name="TResult">Type of returned result.</typeparam>
         /// <param name="numbers">User's array of numbers.</param>
-        /// <param name="transformer">Delegate which contains method for getting string representation of the word.</param>
+        /// <param name="transformer">Interface which contains method for getting string representation of the word.</param>
         /// <returns>Return string representation of user's numbers.</returns>
         public static TResult[] TransformToFormat<TSource, TResult>(this TSource[] numbers, ITransformer<TSource, TResult> transformer)
         {
@@ -25,6 +27,8 @@ namespace WordGeneration
         /// <summary>
         /// Check array according rules and find string words according delegate method.
         /// </summary>
+        /// <typeparam name="TSource">Type of source.</typeparam>
+        /// <typeparam name="TResult">Type of returned result.</typeparam>
         /// <param name="numbers">User's array of numbers.</param>
         /// <param name="transformer">Delegate which contains method for getting string representation of the word.</param>
         /// <returns>Return string representation of user's numbers.</returns>
@@ -33,6 +37,34 @@ namespace WordGeneration
             CheckRules(numbers);
 
             return ChangeWords(numbers, transformer);
+        }
+
+        /// <summary>
+        /// Filters passed array according passed logic.
+        /// </summary>
+        /// <typeparam name="TSource">Type of passed array.</typeparam>
+        /// <param name="numbers">User's array of numbers.</param>
+        /// <param name="predicate">Interface which contains method for getting string representation of the word.</param>
+        /// <returns>Filtered array.</returns>
+        public static TSource[] Filter<TSource>(this TSource[] numbers, IPredicate<TSource> predicate)
+        {
+            CheckRules(numbers);
+
+            return ToFilter(numbers, predicate.IsCorrect);
+        }
+
+        /// <summary>
+        /// Filters passed array according passed logic.
+        /// </summary>
+        /// <typeparam name="TSource">Type of passed array.</typeparam>
+        /// <param name="numbers">User's array of numbers.</param>
+        /// <param name="predicate">Delegate which contains method for getting string representation of the word.</param>
+        /// <returns>Filtered array.</returns>
+        public static TSource[] Filter<TSource>(this TSource[] numbers, Predicate<TSource> predicate)
+        {
+            CheckRules(numbers);
+
+            return ToFilter(numbers, predicate);
         }
 
         private static TResult[] ChangeWords<TSource, TResult>(TSource[] numbers, Func<TSource, TResult> transformer)
@@ -45,20 +77,6 @@ namespace WordGeneration
             }
 
             return allResults;
-        }
-
-        public static TSource[] Filter<TSource>(this TSource[] numbers, IPredicate<TSource> predicate)
-        {
-            CheckRules(numbers);
-
-            return ToFilter(numbers, predicate.IsCorrect);
-        }
-
-        public static TSource[] Filter<TSource>(this TSource[] numbers, Predicate<TSource> predicate)
-        {
-            CheckRules(numbers);
-
-            return ToFilter(numbers, predicate);
         }
 
         private static TSource[] ToFilter<TSource>(this TSource[] numbers, Predicate<TSource> predicate)

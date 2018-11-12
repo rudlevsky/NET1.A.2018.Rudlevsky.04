@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WordGeneration.Interfaces;
 
 namespace WordGeneration
@@ -14,7 +15,7 @@ namespace WordGeneration
         /// <param name="numbers">User's array of numbers.</param>
         /// <param name="transformer">Delegate which contains method for getting string representation of the word.</param>
         /// <returns>Return string representation of user's numbers.</returns>
-        public static string[] TransformToFormat(double[] numbers, ITransformer transformer)
+        public static TResult[] TransformToFormat<TSource, TResult>(this TSource[] numbers, ITransformer<TSource, TResult> transformer)
         {
             CheckRules(numbers);
 
@@ -27,16 +28,16 @@ namespace WordGeneration
         /// <param name="numbers">User's array of numbers.</param>
         /// <param name="transformer">Delegate which contains method for getting string representation of the word.</param>
         /// <returns>Return string representation of user's numbers.</returns>
-        public static string[] TransformToFormat(double[] numbers, Func<double, string> transformer)
+        public static TResult[] TransformToFormat<TSource, TResult>(this TSource[] numbers, Func<TSource, TResult> transformer)
         {
             CheckRules(numbers);
 
             return ChangeWords(numbers, transformer);
         }
 
-        private static string[] ChangeWords(double[] numbers, Func<double, string> transformer)
+        private static TResult[] ChangeWords<TSource, TResult>(TSource[] numbers, Func<TSource, TResult> transformer)
         {
-            string[] allResults = new string[numbers.Length];
+            var allResults = new TResult[numbers.Length];
 
             for (int i = 0; i < numbers.Length; i++)
             {
@@ -46,16 +47,45 @@ namespace WordGeneration
             return allResults;
         }
 
-        private static void CheckRules(double[] numbers)
+        public static TSource[] Filter<TSource>(this TSource[] numbers, IPredicate<TSource> predicate)
+        {
+            CheckRules(numbers);
+
+            return ToFilter(numbers, predicate.IsCorrect);
+        }
+
+        public static TSource[] Filter<TSource>(this TSource[] numbers, Predicate<TSource> predicate)
+        {
+            CheckRules(numbers);
+
+            return ToFilter(numbers, predicate);
+        }
+
+        private static TSource[] ToFilter<TSource>(this TSource[] numbers, Predicate<TSource> predicate)
+        {
+            var arrayResult = new List<TSource>();
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                if(predicate(numbers[i]))
+                {
+                    arrayResult.Add(numbers[i]);
+                }
+            }
+
+            return arrayResult.ToArray();
+        }
+
+        private static void CheckRules<TSource>(TSource[] numbers)
         {
             if (numbers == null)
             {
-                throw new ArgumentNullException(nameof(numbers) + " can't be equal to null");
+                throw new ArgumentNullException($"{nameof(numbers)} can't be equal to null");
             }
 
             if (numbers.Length == 0)
             {
-                throw new ArgumentException(nameof(numbers) + " length can't be equal to 0");
+                throw new ArgumentException($"{nameof(numbers)} length can't be equal to 0");
             }
         }
     }

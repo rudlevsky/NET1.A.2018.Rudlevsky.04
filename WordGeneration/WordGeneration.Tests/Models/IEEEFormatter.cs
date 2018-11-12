@@ -6,7 +6,7 @@ namespace WordGeneration.Tests.Models
     /// <summary>
     /// Class perform converting to IEEE format.
     /// </summary>
-    public class IEEEFormatter : ITransformer
+    public class IEEEFormatter : ITransformer<double, string>
     {
         /// <summary>
         /// Creates string representation of the number in IEEE format.

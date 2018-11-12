@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IPredicate.cs" />
     <Compile Include="Interfaces\ITransformer.cs" />
     <Compile Include="WordGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

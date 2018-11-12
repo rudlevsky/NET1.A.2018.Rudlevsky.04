@@ -59,7 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\IEEEFormatter.cs" />
-    <Compile Include="Models\WordFormetter.cs" />
+    <Compile Include="Models\IntFilters.cs" />
+    <Compile Include="Models\StringFilters.cs" />
+    <Compile Include="Models\WordFormatter.cs" />
     <Compile Include="WordGeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

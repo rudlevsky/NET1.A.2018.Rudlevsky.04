@@ -6,7 +6,7 @@ namespace WordGeneration.Tests.Models
     /// <summary>
     /// Class perform converting to word format.
     /// </summary>
-    public class WordFormetter : ITransformer
+    public class WordFormatter : ITransformer<double, string>
     {
         /// <summary>
         /// Creates string representation of the number.

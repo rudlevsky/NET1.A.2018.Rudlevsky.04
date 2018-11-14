@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using WordGeneration.Tests.Models;
 
@@ -12,28 +13,68 @@ namespace WordGeneration.Tests
         [TestCase(new double[] { 0.378, 6685.7 },ExpectedResult = new string[]
         {"zero point three seven eight", "six six eight five point seven"})]
         public string[] TransformToWordsTest_CorrectArrays_CorrectRusult(double[] doubles)
-            => WordGenerator.TransformToFormat(doubles, new WordFormatter());
+        {
+            var array = doubles;
+            var save = new List<string>();
 
+            foreach(var item in array.TransformToFormat(new WordFormatter()))
+            {
+                save.Add(item);
+            }
+
+            return save.ToArray();
+        }
+            
         [TestCase(new double[] { -2.54, 0.35, 1.7 }, ExpectedResult = new string[]
         {"minus two point five four", "zero point three five", "one point seven"})]
         [TestCase(new double[] { 0.378, 6685.7 }, ExpectedResult = new string[]
         {"zero point three seven eight", "six six eight five point seven"})]
-        public string[] TransformToWordsDelegateTest_CorrectArrays_CorrectRusult(double[] doubles) 
-            => WordGenerator.TransformToFormat(doubles, new WordFormatter());
+        public string[] TransformToWordsDelegateTest_CorrectArrays_CorrectRusult(double[] doubles)
+        {
+            var array = doubles;
+            var save = new List<string>();
+
+            foreach (var item in array.TransformToFormat(new WordFormatter().Perform))
+            {
+                save.Add(item);
+            }
+
+            return save.ToArray();
+        }
 
         [TestCase(new double[] { -255.255, 255.255, 4294967295.0 }, ExpectedResult = new string[]
         {"1100000001101111111010000010100011110101110000101000111101011100",
          "0100000001101111111010000010100011110101110000101000111101011100",
          "0100000111101111111111111111111111111111111000000000000000000000" })]
         public string[] TransformToIEEEFormatTest_CorrectArrays_CorrectResult(double[] doubles)
-            => WordGenerator.TransformToFormat(doubles, new IEEEFormatter());
+        {
+            var array = doubles;
+            var save = new List<string>();
+
+            foreach (var item in array.TransformToFormat(new IEEEFormatter()))
+            {
+                save.Add(item);
+            }
+
+            return save.ToArray();
+        }
 
         [TestCase(new double[] { -255.255, 255.255, 4294967295.0 }, ExpectedResult = new string[]
         {"1100000001101111111010000010100011110101110000101000111101011100",
          "0100000001101111111010000010100011110101110000101000111101011100",
          "0100000111101111111111111111111111111111111000000000000000000000" })]
         public string[] TransformToIEEEFormatDelegateTest_CorrectArrays_CorrectResult(double[] doubles)
-            => WordGenerator.TransformToFormat(doubles, new IEEEFormatter());
+        {
+            var array = doubles;
+            var save = new List<string>();
+
+            foreach (var item in array.TransformToFormat(new IEEEFormatter().Perform))
+            {
+                save.Add(item);
+            }
+
+            return save.ToArray();
+        }
 
         [Test]
         public void TransformToFormat_NullReference_ArgumentNullException()
@@ -42,21 +83,9 @@ namespace WordGeneration.Tests
         }
 
         [Test]
-        public void TransformToFormat_EmptyArray_ArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() => WordGenerator.TransformToFormat(new double[] { }, new IEEEFormatter()));
-        }
-
-        [Test]
         public void FilterMethod_NullArgument_ArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => WordGenerator.Filter(null, new IntFilters()));
-        }
-
-        [Test]
-        public void FilterMethod_EmptyArray_ArgumentException()
-        {
-            Assert.Throws<ArgumentException>(() => new int[] { }.Filter(new IntFilters()));
         }
 
         [Test]
